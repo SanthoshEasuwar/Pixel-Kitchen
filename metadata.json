@@ -1,0 +1,6 @@
+{
+  "name": "PixelKitchen",
+  "description": "Premium liquid-glass image color palette generator and creative design playground.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
