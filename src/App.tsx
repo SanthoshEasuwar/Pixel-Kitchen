@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { exportPalette } from "./exportApi";
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Workspace } from './components/Workspace';
@@ -167,6 +168,13 @@ export default function App() {
     setIsExportModalOpen(true);
   };
 
+  // Cloud export: sends the current palette to API Gateway -> Lambda -> S3 + DynamoDB
+  const handleCloudExport = async () => {
+    if (!colors.length) return;
+    showToast('Exporting to cloud...', undefined, 'info');
+    await exportPalette(colors.map((c) => c.hex));
+  };
+
   const handleOpenSaveModal = () => {
     setNewPaletteName(`${activeImageName} Palette`);
     setNewPaletteTag('');
@@ -271,6 +279,17 @@ export default function App() {
             document.getElementById('playground')?.scrollIntoView({ behavior: 'smooth' });
           }}
         />
+
+        {/* Cloud Export Button (S3) */}
+        <div className="flex justify-center py-6">
+          <button
+            onClick={handleCloudExport}
+            disabled={!colors.length}
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-xs font-semibold text-white shadow-lg shadow-violet-600/25 cursor-pointer disabled:opacity-50"
+          >
+            Export to cloud (S3)
+          </button>
+        </div>
 
         {/* Creative Palette Playground */}
         <Playground
